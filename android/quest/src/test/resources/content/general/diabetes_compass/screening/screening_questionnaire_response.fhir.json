@@ -1,8 +1,50 @@
 {
   "resourceType": "QuestionnaireResponse",
+  "status": "completed",
   "item": [
     {
       "linkId": "page-1",
+      "item": [
+        {
+          "linkId": "diabetes-diagnosis-history",
+          "text": "Are you diagnosed with diabetes and taking medicine?",
+          "answer": [
+            {
+              "valueBoolean": true
+            }
+          ]
+        },
+        {
+          "linkId": "diabetes-screenening-history",
+          "text": "Have you been screened for diabetes in the last 12 months?",
+          "answer": [
+            {
+              "valueBoolean": true
+            }
+          ]
+        },
+        {
+          "linkId": "hypertension-diagnosis-history",
+          "text": "Are you diagnosed with hypertension and taking medicine?",
+          "answer": [
+            {
+              "valueBoolean": false
+            }
+          ]
+        },
+        {
+          "linkId": "hypertension-screened-history",
+          "text": "Have you screened for hypertension in the last 12 months?",
+          "answer": [
+            {
+              "valueBoolean": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "linkId": "page-2",
       "item": [
         {
           "linkId": "screening-instructions-title",
@@ -23,7 +65,7 @@
       ]
     },
     {
-      "linkId": "page-2",
+      "linkId": "page-3",
       "item": [
         {
           "linkId": "age-title",
@@ -126,7 +168,7 @@
       ]
     },
     {
-      "linkId": "page-3",
+      "linkId": "page-4",
       "item": [
         {
           "linkId": "results-title",

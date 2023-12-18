@@ -28,13 +28,96 @@ group ExtractEncounter(source src : QuestionnaireResponse, target bundle: Bundle
             } "r_enc_cc_cod";
             src -> concept.text = "Elective" "r_enc_prio_text";
         } "r_en_prio";
+
+        src then ExtractPreScreeningObservations(src, bundle, encounter) "r_extract_pscrn";
         src then ExtractConsent(src, bundle, encounter) "r_extract_csnt";
         src then ExtractObservations(src, bundle, encounter) "r_extract_obs";
     } "r_encounter";
 }
 
-group ExtractConsent(source src : QuestionnaireResponse, target bundle: Bundle, target encounter: Encounter) {
+group ExtractPreScreeningObservations(source src : QuestionnaireResponse, target bundle: Bundle, target encounter: Encounter) {
+    src then
+    ExtractDiabetesDiagnosisHistory(src, bundle, encounter),
+    ExtractDiabetesScreeningHistory(src, bundle, encounter),
+    ExtractHypertensionDiagnosisHistory(src, bundle, encounter),
+    ExtractHypertensionScreeningHistory(src, bundle, encounter)
+    "r_enc_obs_pscrn";
+}
+
+group ExtractDiabetesDiagnosisHistory(source src : QuestionnaireResponse, target bundle: Bundle, target encounter: Encounter) {
     src.item as page where(linkId = "page-1") then {
+        page.item as item where(linkId = "diabetes-diagnosis-history" and answer.count() > 0) then {
+                src -> bundle.entry as entry,
+                entry.resource = create("Observation") as obs then {
+                    src -> obs.id = uuid(),
+                        obs.status = "final",
+                        obs.code = cc("https://smartregister.org","diabetes-diagnosis-history", "Client diagnosed with diabetes and taking medicine"),
+                        obs.encounter = reference(encounter),
+                        obs.effective = evaluate(src, now()) "r_date_of_measure";
+                    src->obs.subject = evaluate(src, $this.subject) "r_obs_subject";
+                    src -> obs.performer = evaluate(src, $this.generalPractitioner.first()) "r_obs_performer";
+                    src->obs.value = evaluate(item, $this.answer.value) "r_obs_value_c_diabetes_diagnosis";
+                } "r_obs_diabetes_diagnosis_item";
+        } "r_obs_diabetes_diagnosis";
+    } "r_obs_diabetes_diagnosis_pg";
+}
+
+group ExtractDiabetesScreeningHistory(source src : QuestionnaireResponse, target bundle: Bundle, target encounter: Encounter) {
+    src.item as page where(linkId = "page-1") then {
+        page.item as item where(linkId = "diabetes-screenening-history" and answer.count() > 0) then {
+                src -> bundle.entry as entry,
+                entry.resource = create("Observation") as obs then {
+                    src -> obs.id = uuid(),
+                        obs.status = "final",
+                        obs.code = cc("https://smartregister.org","diabetes-screening-history", "Client screened for diabetes in the last 12 months"),
+                        obs.encounter = reference(encounter),
+                        obs.effective = evaluate(src, now()) "r_date_of_measure";
+                    src->obs.subject = evaluate(src, $this.subject) "r_obs_subject";
+                    src -> obs.performer = evaluate(src, $this.generalPractitioner.first()) "r_obs_performer";
+                    src->obs.value = evaluate(item, $this.answer.value) "r_obs_value_c_diabetes_screening";
+                } "r_obs_diabetes_diagnosis_item";
+        } "r_obs_diabetes_screening";
+    } "r_obs_diabetes_screening_pg";
+}
+
+group ExtractHypertensionDiagnosisHistory(source src : QuestionnaireResponse, target bundle: Bundle, target encounter: Encounter) {
+    src.item as page where(linkId = "page-1") then {
+        page.item as item where(linkId = "hypertension-diagnosis-history" and answer.count() > 0) then {
+                src -> bundle.entry as entry,
+                entry.resource = create("Observation") as obs then {
+                    src -> obs.id = uuid(),
+                        obs.status = "final",
+                        obs.code = cc("https://smartregister.org","hypertension-diagnosis-history", "Client diagnosed with hypertension and taking medicine"),
+                        obs.encounter = reference(encounter),
+                        obs.effective = evaluate(src, now()) "r_date_of_measure";
+                    src->obs.subject = evaluate(src, $this.subject) "r_obs_subject";
+                    src -> obs.performer = evaluate(src, $this.generalPractitioner.first()) "r_obs_performer";
+                    src->obs.value = evaluate(item, $this.answer.value) "r_obs_value_c_hypertension_diagnosis";
+                } "r_obs_hypertension_diagnosis_item";
+        } "r_obs_hypertension_diagnosis";
+    } "r_obs_hypertension_diagnosis_pg";
+}
+
+group ExtractHypertensionScreeningHistory(source src : QuestionnaireResponse, target bundle: Bundle, target encounter: Encounter) {
+    src.item as page where(linkId = "page-1") then {
+        page.item as item where(linkId = "hypertension-screened-history" and answer.count() > 0) then {
+                src -> bundle.entry as entry,
+                entry.resource = create("Observation") as obs then {
+                    src -> obs.id = uuid(),
+                        obs.status = "final",
+                        obs.code = cc("https://smartregister.org","hypertension-screening-history", "Client screened for hypertension in the last 12 months"),
+                        obs.encounter = reference(encounter),
+                        obs.effective = evaluate(src, now()) "r_date_of_measure";
+                    src->obs.subject = evaluate(src, $this.subject) "r_obs_subject";
+                    src -> obs.performer = evaluate(src, $this.generalPractitioner.first()) "r_obs_performer";
+                    src->obs.value = evaluate(item, $this.answer.value) "r_obs_value_c_hypertension_screening";
+                } "r_obs_hypertension_diagnosis_item";
+        } "r_obs_hypertension_screening";
+    } "r_obs_hypertension_screening_pg";
+}
+
+group ExtractConsent(source src : QuestionnaireResponse, target bundle: Bundle, target encounter: Encounter) {
+    src.item as page where(linkId = "page-2") then {
         page.item as item where(linkId = "screening-consent-choice") then {
                 src -> bundle.entry as entry,
                 entry.resource = create("Consent") as cns then {
@@ -79,7 +162,7 @@ group ExtractObservations(source src : QuestionnaireResponse, target bundle: Bun
 }
 
 group ExtractAge(source src : QuestionnaireResponse, target bundle: Bundle, target encounter: Encounter) {
-    src.item as page where(linkId = "page-2") then {
+    src.item as page where(linkId = "page-3") then {
         page.item as item where(linkId = "age-val" and answer.count() > 0) then {
                 src -> bundle.entry as entry,
                 entry.resource = create("Observation") as obs then {
@@ -98,7 +181,7 @@ group ExtractAge(source src : QuestionnaireResponse, target bundle: Bundle, targ
 }
 
 group ExtractGender(source src : QuestionnaireResponse, target bundle: Bundle, target encounter: Encounter) {
-    src.item as page where(linkId = "page-2") then {
+    src.item as page where(linkId = "page-3") then {
         page.item as item where(linkId = "gender-val" and answer.count() > 0) then {
                 src -> bundle.entry as entry,
                 entry.resource = create("Observation") as obs then {
@@ -112,12 +195,12 @@ group ExtractGender(source src : QuestionnaireResponse, target bundle: Bundle, t
                     src -> obs.performer = evaluate(src, $this.generalPractitioner.first()) "r_obs_performer";
                     src->obs.value = create("CodeableConcept") as codeableConcept then {
                         src->evaluate(item, $this.answer.value) as genderValue then {
-                            src where(genderValue = "male") then {
+                            src where(genderValue = "Male") then {
                                 src->codeableConcept.coding = c("http://hl7.org/fhir/administrative-gender","male") as coding then {
                                     src->coding.display = "Male" "r_obs_code_display";
                                 } "r_obs_cc_coding";
                             } "r_obs_code_male";
-                            src where(genderValue = "female") then {
+                            src where(genderValue = "Female") then {
                                 src->codeableConcept.coding = c("http://hl7.org/fhir/administrative-gender","female") as coding then {
                                     src->coding.display = "Female" "r_obs_code_display";
                                 } "r_obs_cc_coding";
@@ -130,7 +213,7 @@ group ExtractGender(source src : QuestionnaireResponse, target bundle: Bundle, t
 }
 
 group ExtractFamilyHistory(source src : QuestionnaireResponse, target bundle: Bundle, target encounter: Encounter) {
-    src.item as page where(linkId = "page-2") then {
+    src.item as page where(linkId = "page-3") then {
         page.item as item where(linkId = "family-history-choice" and answer.count() > 0) then {
                 src -> bundle.entry as entry,
                 entry.resource = create("Observation") as obs then {
@@ -167,7 +250,7 @@ group ExtractFamilyHistory(source src : QuestionnaireResponse, target bundle: Bu
 }
 
 group ExtractSystolicBP(source src : QuestionnaireResponse, target bundle: Bundle, target encounter: Encounter) {
-    src.item as page where(linkId = "page-2") then {
+    src.item as page where(linkId = "page-3") then {
         page.item as item where(linkId = "systolic-bp-measurement" and answer.count() > 0) then {
                 src -> bundle.entry as entry,
                 entry.resource = create("Observation") as obs then {
@@ -186,13 +269,13 @@ group ExtractSystolicBP(source src : QuestionnaireResponse, target bundle: Bundl
 }
 
 group ExtractDiastolicBP(source src : QuestionnaireResponse, target bundle: Bundle, target encounter: Encounter) {
-    src.item as page where(linkId = "page-2") then {
+    src.item as page where(linkId = "page-3") then {
         page.item as item where(linkId = "diastolic-bp-measurement" and answer.count() > 0) then {
                 src -> bundle.entry as entry,
                 entry.resource = create("Observation") as obs then {
                     src -> obs.id = uuid(),
                         obs.status = "final",
-                        obs.code = cc("http://snomed.info/sct","163030003", "O/E - Diastolic BP reading"),
+                        obs.code = cc("http://snomed.info/sct","163031004", "O/E - Diastolic BP reading"),
                         obs.category = cc('http://terminology.hl7.org/CodeSystem/observation-category', "vital-signs"),
                         obs.encounter = reference(encounter),
                         obs.effective = evaluate(src, now()) "r_date_of_measure";
@@ -205,7 +288,7 @@ group ExtractDiastolicBP(source src : QuestionnaireResponse, target bundle: Bund
 }
 
 group ExtractWaist(source src : QuestionnaireResponse, target bundle: Bundle, target encounter: Encounter) {
-    src.item as page where(linkId = "page-2") then {
+    src.item as page where(linkId = "page-3") then {
         page.item as item where(linkId = "waist-measurement" and answer.count() > 0) then {
                 src -> bundle.entry as entry,
                 entry.resource = create("Observation") as obs then {
@@ -224,7 +307,7 @@ group ExtractWaist(source src : QuestionnaireResponse, target bundle: Bundle, ta
 }
 
 group ExtractHypertensionRisk(source src : QuestionnaireResponse, target bundle : Bundle, target encounter : Encounter) {
-    src.item as page where(linkId = "page-2") then {
+    src.item as page where(linkId = "page-3") then {
         page.item as item where(linkId = "hypertension-risk" and answer.count() > 0) then {
                 src -> bundle.entry as entry,
                 entry.resource = create("Observation") as obs then {
@@ -243,7 +326,7 @@ group ExtractHypertensionRisk(source src : QuestionnaireResponse, target bundle 
 }
 
 group ExtractRiskScore(source src : QuestionnaireResponse, target bundle: Bundle, target encounter: Encounter) {
-    src.item as page where(linkId = "page-2") then {
+    src.item as page where(linkId = "page-3") then {
         page.item as item where(linkId = "score-calculations" and answer.count() > 0) then {
                 src -> bundle.entry as entry,
                 entry.resource = create("RiskAssessment") as rsk then {
@@ -280,7 +363,7 @@ group ExtractRiskScore(source src : QuestionnaireResponse, target bundle: Bundle
 }
 
 group ExtractReferralServiceRequest(source src : QuestionnaireResponse, target bundle : Bundle, target encounter : Encounter) {
-    src.item as page where(linkId = "page-3") then {
+    src.item as page where(linkId = "page-4") then {
         page.item as item where(linkId="refer-client-choice" and answer.value.code = 'refer-client') then {
             page.item as item where(linkId="health-facility-choice" and answer.count() > 0) then {
                 src -> bundle.entry as entry, entry.resource = create("ServiceRequest") as sRequest then {
