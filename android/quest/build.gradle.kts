@@ -182,7 +182,7 @@ android {
   productFlavors {
     create("opensrp") {
       dimension = "apps"
-      manifestPlaceholders["appLabel"] = "OpenSRP"
+      manifestPlaceholders["appLabel"] = "BKM"
       isDefault = true
     }
 
@@ -191,6 +191,13 @@ android {
       applicationIdSuffix = ".ecbis"
       versionNameSuffix = "-ecbis"
       manifestPlaceholders["appLabel"] = "MOH eCBIS"
+    }
+
+    create("bkmd") {
+      dimension = "apps"
+      applicationIdSuffix = ".bkmd"
+      versionNameSuffix = "-bkmd"
+      manifestPlaceholders["appLabel"] = "BKM Development"
     }
 
     create("ecbis_preview") {

@@ -43,7 +43,7 @@
     },
     {
       "id": "childRegister",
-      "display": "Children",
+      "display": "Under 5",
       "showCount": true,
       "menuIconConfig": {
         "type": "local",
@@ -209,26 +209,6 @@
   },
   "staticMenu": [
     {
-      "id": "taskRegister",
-      "display": "Task Register",
-      "showCount": true,
-      "menuIconConfig": {
-        "type": "local",
-        "reference": "ic_tasks_priority"
-      },
-      "actions": [
-        {
-          "trigger": "ON_CLICK",
-          "workflow": "LAUNCH_REGISTER",
-          "id": "taskRegister"
-        },
-        {
-          "trigger": "ON_COUNT",
-          "id": "taskRegister"
-        }
-      ]
-    },
-    {
       "id": "inventoryRegister",
       "display": "Stock Inventory",
       "icon": "",
@@ -262,22 +242,6 @@
           "trigger": "ON_CLICK",
           "workflow": "LAUNCH_REPORT",
           "id": "serviceDeliveryMeasureReport"
-        }
-      ]
-    },
-    {
-      "id": "practitionerReports",
-      "visible": true,
-      "display": "Practitioner Reports",
-      "menuIconConfig": {
-        "type": "local",
-        "reference": "ic_reports"
-      },
-      "actions": [
-        {
-          "trigger": "ON_CLICK",
-          "workflow": "LAUNCH_REPORT",
-          "id": "practitionerMeasureReport"
         }
       ]
     },

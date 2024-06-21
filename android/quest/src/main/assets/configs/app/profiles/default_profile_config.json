@@ -217,6 +217,13 @@
       ]
     },
     {
+      "name": "isChildUnder5years",
+      "condition": "true",
+      "actions": [
+        "data.put('isChildUnder5years', fhirPath.extractValue(Patient, \"Patient.active and (Patient.birthDate > today() - 59 'months')\"))"
+      ]
+    },
+    {
       "name": "latestObservations",
       "condition": "true",
       "actions": [
@@ -2237,6 +2244,30 @@
       ]
     },
     {
+      "title": "Under5 Visit Register",
+      "titleColor": "@{patientTextColor}",
+      "visible": "@{isChildUnder5years}",
+      "enabled": "@{patientActive}",
+      "actions": [
+        {
+          "trigger": "ON_CLICK",
+          "workflow": "LAUNCH_QUESTIONNAIRE",
+          "questionnaire": {
+            "id": "c33b3615-10ff-48fc-a0fc-7a76f9cb8a56",
+            "title": "Under5 Visit Register",
+            "resourceIdentifier": "@{patientId}",
+            "params": [
+              {
+                "key": "familyLogicalId",
+                "value": "@{familyLogicalId}",
+                "paramType": "UPDATE_DATE_ON_EDIT"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "title": "Record as Sick",
       "titleColor": "@{patientTextColor}",
       "visible": "@{isChildOver2months}",
@@ -2647,6 +2678,32 @@
         }
       ]
     },
+
+    {
+      "title": "COVID-19/TB Detection Register",
+      "titleColor": "@{patientTextColor}",
+      "visible": "@{isAdult}",
+      "enabled": "@{patientActive}",
+      "actions": [
+        {
+          "trigger": "ON_CLICK",
+          "workflow": "LAUNCH_QUESTIONNAIRE",
+          "questionnaire": {
+            "id": "998bb6f3-fc7b-4fb7-904d-8a36432735b1",
+            "title": "COVID-19/TB Detection Register",
+            "resourceIdentifier": "@{patientId}",
+            "params": [
+              {
+                "key": "familyLogicalId",
+                "value": "@{familyLogicalId}",
+                "paramType": "UPDATE_DATE_ON_EDIT"
+              }
+            ]
+          }
+        }
+      ]
+    },
+
     {
       "title": "Record Covid Vaccination",
       "titleColor": "@{patientTextColor}",
@@ -2690,6 +2747,30 @@
             "planDefinitions": [
               "a881d53a-590c-4d52-ae0f-c87b7ff04148"
             ],
+            "params": [
+              {
+                "key": "familyLogicalId",
+                "value": "@{familyLogicalId}",
+                "paramType": "UPDATE_DATE_ON_EDIT"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "title": "Record ANC Visit",
+      "titleColor": "@{patientTextColor}",
+      "visible": "@{canBearChild}",
+      "enabled": "@{patientActive}",
+      "actions": [
+        {
+          "trigger": "ON_CLICK",
+          "workflow": "LAUNCH_QUESTIONNAIRE",
+          "questionnaire": {
+            "id": "f642fe17-1d75-45a2-b813-3cfb69706cb0",
+            "title": "Record ANC Visit",
+            "resourceIdentifier": "@{patientId}",
             "params": [
               {
                 "key": "familyLogicalId",
@@ -2904,6 +2985,30 @@
       ]
     },
     {
+      "title": "Register Service",
+      "titleColor": "@{patientTextColor}",
+      "visible": "true",
+      "enabled": "@{patientActive}",
+      "actions": [
+        {
+          "trigger": "ON_CLICK",
+          "workflow": "LAUNCH_QUESTIONNAIRE",
+          "questionnaire": {
+            "id": "6e946250-bc6b-42c9-b89a-57b643fd5923",
+            "resourceIdentifier": "@{patientId}",
+            "title": "VHW CH Services Registration Form",
+            "params": [
+              {
+                "paramType": "UPDATE_DATE_ON_EDIT",
+                "key": "familyLogicalId",
+                "value": "@{familyLogicalId}"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
       "title": "Register with Disease",
       "titleColor": "@{patientTextColor}",
       "visible": "true",
@@ -2916,6 +3021,34 @@
             "id": "f7004382-ba3d-4f62-a687-6e9d18c09d3a",
             "resourceIdentifier": "@{patientId}",
             "title": "Diseases Registration Form",
+            "planDefinitions": [
+              "55d89227-3a06-4a9a-b526-2819dcb1d301",
+              "d6263f2d-2ebe-456c-bbb7-786dabd3ea22"
+            ],
+            "params": [
+              {
+                "paramType": "UPDATE_DATE_ON_EDIT",
+                "key": "familyLogicalId",
+                "value": "@{familyLogicalId}"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "title": "Record Disease FollowUp",
+      "titleColor": "@{patientTextColor}",
+      "visible": "true",
+      "enabled": "@{patientActive}",
+      "actions": [
+        {
+          "trigger": "ON_CLICK",
+          "workflow": "LAUNCH_QUESTIONNAIRE",
+          "questionnaire": {
+            "id": "e14b5743-0a06-4ab5-aaee-ac158d4cb64f",
+            "resourceIdentifier": "@{patientId}",
+            "title": "Disease FollowUp Form",
             "planDefinitions": [
               "55d89227-3a06-4a9a-b526-2819dcb1d301",
               "d6263f2d-2ebe-456c-bbb7-786dabd3ea22"

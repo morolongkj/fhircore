@@ -8,7 +8,7 @@
     <string name="empty_client_list_message_title">No Results</string>
     <string name="empty_client_list_message_details">Sorry, we could not find client with given name or ID</string>
     <string name="register_new_client">Register new client</string>
-    <string name="default_app_title" translatable="false">Fhir App</string>
+    <string name="default_app_title" translatable="false">BKM</string>
     <string name="app_logo">Application logo</string>
     <string name="powered_by">Powered By</string>
     <string name="app_version">App version %1$d(%2$s)</string>
@@ -88,23 +88,23 @@
     <string name="clients">Clients</string>
     <string name="logout">Log out</string>
     <string name="application_id">Application ID</string>
-    <string name="app_id_sample" translatable="false">e.g. ecbis, quest, cha</string>
+    <string name="app_id_sample" translatable="false">e.g. bkm, bkmd quest, cha</string>
     <string name="load_configurations">LOAD CONFIGURATIONS</string>
-    <string name="fhir_core_app" translatable="false">FHIRCORE APP</string>
+    <string name="fhir_core_app" translatable="false">Bophelo Ka Mosebeletsi (BKM)</string>
     <string name="remember_app">Remember application</string>
     <string name="done">Done</string>
     <string name="replace_photo">Replace photo</string>
     <string name="take_photo">Take photo</string>
     <string name="edit">Edit</string>
     <string name="application_not_supported">Error loading application %1$s configs</string>
-    <string name="eCBIS_app_name" translatable="false">eCBIS</string>
+    <string name="eCBIS_app_name" translatable="false">BKM</string>
     <string name="invalid_login_credentials">username or password is invalid</string>
     <string name="invalid_form_id">Invalid form ID attached</string>
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="required_constraint_validation_error_msg">There is no response to the required field.</string>
     <string name="set_pin">Set PIN</string>
-    <string name="set_pin_message">CHA will use this PIN to login</string>
+    <string name="set_pin_message">BKM will use this PIN to login</string>
     <string name="enter_pin_for_user">Enter PIN for %1$s</string>
     <string name="incorrect_pin_please_retry">Incorrect PIN, please try again</string>
     <string name="pin_menu_login">Login</string>

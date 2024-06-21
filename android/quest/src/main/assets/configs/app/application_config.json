@@ -2,7 +2,7 @@
   "appId": "app",
   "configType": "application",
   "theme": "DEFAULT",
-  "appTitle": "Quest",
+  "appTitle": "",
   "registerDate": "2020-10-27",
   "reportRepeatTime": "23:22",
   "remoteSyncPageSize": 100,
@@ -14,10 +14,7 @@
   "useDarkTheme": false,
   "syncInterval": 30,
   "syncStrategy": [
-    "Location",
-    "Organization",
-    "CareTeam",
-    "Practitioner"
+    "Location"
   ],
   "loginConfig": {
     "showLogo": true,
